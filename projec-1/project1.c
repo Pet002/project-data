@@ -38,6 +38,9 @@ int checkpr(char temp){
     int pr;
     if(temp == '(')
         return 5;
+    else if(temp == '^'){
+        return 4;
+    }
     else if(temp == '*' || temp == '/'){
         return 2;
     }else{
@@ -55,7 +58,7 @@ void checkoper(char ck){
         {
             while ( (checkpr(ck) <= checkpr(stacktop())) && stacktop() != '\0' )
             {
-                printf("%c ",pop());
+                printf("%c " ,pop());
             }
             
         }
