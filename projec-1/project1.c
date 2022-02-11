@@ -47,15 +47,12 @@ char stacktop()
         return top->c;
 }
 
+
 int checkpr(char temp)
 {
     int pr;
-    if (temp == '(')
+    if (temp == '^')
         return 5;
-    else if (temp == '^')
-    {
-        return 4;
-    }
     else if (temp == '*' || temp == '/')
     {
         return 2;
@@ -76,7 +73,7 @@ void checkoper(char ck)
     {
         if (checkpr(ck) <= checkpr(stacktop()))
         {
-            while ((checkpr(ck) <= checkpr(stacktop())) && stacktop() != '\0')
+            while ((checkpr(ck) <= checkpr(stacktop())) && stacktop() != '\0' && stacktop() != '(')
             {
                 printf("%c ", pop());
             }
@@ -100,6 +97,8 @@ void prefixToPostfix()
             }
             pop();
         }
+        else if(ch == '(')
+            push(ch);
         else
             checkoper(ch);
     }
@@ -162,32 +161,6 @@ void postfixToResult()
     printf("%.2f", top2->num);
 }
 
-// main
-/*int main(int argc, char const *argv[])
-{
-    char ch;
-    while ((ch = getchar()) != '\n')
-    {
-        if(isdigit(ch) || isalpha(ch))
-            printf("%c ", ch);
-        else if(ch == ')'){
-            while (stacktop() != '(')
-            {
-                printf("%c ", pop());
-            }
-            pop();
-        }
-        else
-            checkoper(ch);
-    }
-    while(stacktop() != '\0'){
-        printf("%c ", pop());
-    }
-
-    return 0;
-}*/
-
-// color set
 
 void red()
 {
@@ -247,6 +220,7 @@ int main(int argc, char const *argv[])
     else if (check == '2')
     {
         yellow();
+        printf("--------------------------------------------\n");
         printf("Your postfix is : ");
         char ch;
         while (scanf("%c" , &ch) && ch != '\n')
@@ -254,7 +228,6 @@ int main(int argc, char const *argv[])
             postToResult(ch);
         }
         
-        printf("--------------------------------------------\n");
         printf("Your result is : ");
         printf("%.2f", top2->num);
         printf("\n--------------------------------------------\n");
