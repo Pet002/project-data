@@ -65,7 +65,10 @@ int checkpr(char temp)
 
 void checkoper(char ck)
 {
-    if (stacktop() == '\0' || stacktop() == '(')
+    if(ck == '('){
+        push(ck);
+    }
+    else if (stacktop() == '\0' || stacktop() == '(')
     {
         push(ck);
     }
