@@ -75,6 +75,78 @@ int edge[26][26];
 //                  };
 
 
+//testcase6 : nok 1
+// int numOfNode = 5;
+// int edge[5][5] = {
+//       {0,1,1,0,0},
+//       {1,0,1,1,1},
+//       {1,1,0,0,0},
+//       {0,1,0,0,1},
+//       {0,1,0,1,0}
+//     };
+
+
+//testcase7 : nok2
+// int numOfNode = 4;
+// int edge[4][4] ={
+//       {0,2,2,0},
+//       {2,0,1,1},
+//       {2,1,0,1},
+//       {0,1,1,0}
+//     };
+
+
+//testcase8 : nok3
+// int numOfNode = 5;
+// int edge[5][5] = {
+//       {0,1,1,0,0},
+//       {1,2,1,0,0},
+//       {1,1,0,1,1},
+//       {0,0,1,0,1},
+//       {0,0,1,1,0} 
+//     };
+
+
+//testcase 9 : nok4
+// int numOfNode = 5;
+// int edge[5][5] = {
+//       {0,1,0,0,0},
+//       {1,0,1,1,1},
+//       {0,1,0,1,0},
+//       {0,1,1,0,1},
+//       {0,1,0,1,0} 
+//     };
+
+//testcase 10 : nok5
+// int numOfNode = 4;
+// int edge[4][4] = {
+//       {0,2,2,0},
+//       {2,0,0,1},
+//       {2,0,0,1},
+//       {0,1,1,0}
+//     };
+
+
+//testcase 11: nok 6
+// int numOfNode = 4;
+// int edge[4][4] = {
+//       {2,1,1,0},
+//       {1,0,1,1},
+//       {1,1,0,0},
+//       {0,1,0,0}
+//     };
+
+
+//testcase 12 : nok7
+// int numOfNode = 6;
+// int edge[6][6] = {
+//       {0,1,1,0,0,0},
+//       {1,0,1,0,0,0},
+//       {1,1,0,0,0,0},
+//       {0,0,0,0,1,1},
+//       {0,0,0,1,0,1},
+//       {0,0,0,1,1,0}
+//     };
 
 
 void printNode(){
@@ -94,8 +166,8 @@ void addNode(int numOfNode){
 int SumofVertical(){
     for(int i = 0 ; i < numOfNode; i++){
         for(int j = 0; j < numOfNode ; j++){
-            if(edge[i][j] == 1){
-                sum++;
+            if(edge[i][j] > 0){
+                sum = sum + edge[i][j];
             }
         }
     }
@@ -112,9 +184,13 @@ char *findSubCircuit(){
 
     while(i < numOfNode && j < numOfNode && locationindex != numOfNode && sum != 0 && ( !(check) ||  circuit[0] != circuit[locationCircuit - 1] ) ){
         
-        if(edge[i][j] == 1){
-            edge[i][j] = 0;
-            edge[j][i] = 0;
+        if(edge[i][j] > 0){
+            if(i == j){
+                edge[i][j] = edge[i][j] - 2;
+            }else{
+                edge[i][j] = edge[i][j] - 1;
+                edge[j][i] = edge[j][i] - 1;
+            }
             if(strlen(circuit) == 0){
                 circuit[locationCircuit++] = node[i];
                 check = 1;
@@ -149,7 +225,7 @@ char *findSubCircuit(){
 
 
 void printVertical(){
-        printf("\\  ");
+        printf("\\ ");
 
     for(int i = 0; i < numOfNode; i++){
         printf("%c ", node[i]);
@@ -170,7 +246,7 @@ void printVertical(){
 
 char **getAllCircuit(){
     int i = 0, nullCheck = 1;
-    char **result = malloc(sizeof(char *) * 50);
+    char **result = malloc(sizeof(char *) * numOfNode * 2);
     while (sum != 0)
     {
         char * x = findSubCircuit();
@@ -293,12 +369,10 @@ int main(int argc, char const *argv[])
             edge[j][i] = x;
         }
     }
+
+    
     printVertical();
-
-
-
-    // addNode(numOfNode);
-    // printNode(node);
+    printNode(node);
     
     //to save data of vertical
     int valueVertical = SumofVertical()/2;
@@ -341,6 +415,9 @@ int main(int argc, char const *argv[])
         printf("Is non-Euler Circuit");
     }
     printf("\n");
+    if(arr){
+        free(arr);
+    }
 
     // printVertical();
 
