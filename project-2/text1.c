@@ -6,23 +6,23 @@ char node[26];
 int sum = 0;
 
 //**input Testcase : when we need input data
-// int numOfNode = 0;
-// int edge[26][26];
+int numOfNode = 0;
+int edge[26][26];
 
 
 
 
 //**testcase 1 : Euler circuit;
-int numOfNode = 7;
-int edge[26][26] = {
-                    {0, 1, 1, 0, 1, 1, 0},
-                    {1, 0, 0, 1, 1, 1, 0},
-                    {1, 0, 0, 1, 1, 0, 1},
-                    {0, 1, 1, 0, 1, 0, 1},
-                    {1, 1, 1, 1, 0, 0, 0},
-                    {1, 1, 0, 0, 0, 0, 0},
-                    {0, 0, 1, 1, 0, 0, 0}
-                 };
+// int numOfNode = 7;
+// int edge[26][26] = {
+//                     {0, 1, 1, 0, 1, 1, 0},
+//                     {1, 0, 0, 1, 1, 1, 0},
+//                     {1, 0, 0, 1, 1, 0, 1},
+//                     {0, 1, 1, 0, 1, 0, 1},
+//                     {1, 1, 1, 1, 0, 0, 0},
+//                     {1, 1, 0, 0, 0, 0, 0},
+//                     {0, 0, 1, 1, 0, 0, 0}
+//                  };
 
 
 
@@ -60,6 +60,19 @@ int edge[26][26] = {
 //                 {0, 0, 0, 1, 1, 0}
 // };
 
+
+//testcase5 : Lecture circuit
+
+// int numOfNode = 7;
+// int edge[26][26] = {
+//                     {0, 1, 0, 0, 0, 1, 0},
+//                     {1, 0, 1, 0, 0, 1, 1},
+//                     {0, 1, 0, 1, 1, 0, 1},
+//                     {0, 0, 1, 0, 1, 0, 0},
+//                     {0, 0, 1, 1, 0, 1, 1},
+//                     {1, 1, 0, 0, 1, 0, 1},
+//                     {0, 1, 1, 0, 1, 1, 0}
+//                  };
 
 
 
@@ -136,8 +149,16 @@ char *findSubCircuit(){
 
 
 void printVertical(){
+        printf("\\  ");
+
+    for(int i = 0; i < numOfNode; i++){
+        printf("%c ", node[i]);
+    }
+    printf("\n");
+
     for (int i = 0; i < numOfNode; i++)
     {
+        printf("%c ", node[i]);
         for(int j = 0; j < numOfNode; j++){
             printf("%d " , edge[i][j]);
         }
@@ -153,7 +174,7 @@ char **getAllCircuit(){
     while (sum != 0)
     {
         char * x = findSubCircuit();
-        result[i] = malloc(sizeof(char ) * (30 + 1));
+        result[i] = malloc(sizeof(char ) * (100 + 1));
         if(x != NULL){
             strcpy(result[i], x);
             free(x);
@@ -175,7 +196,7 @@ char **getAllCircuit(){
 
 
 int checkcircuit(char **arr){
-    int x = 0, circuit_check = 0;
+    int x = 1, circuit_check = 0;
     for(int i = 0 ; arr[i] != NULL ;i++ ){
         circuit_check++;
     }
@@ -184,6 +205,7 @@ int checkcircuit(char **arr){
         for(int j = 0; j < strlen(arr[0]) ; j++){
             if(arr[0][j] == arr[i][0]){
                 x++;
+                break;
             }
         }
     }
@@ -201,7 +223,7 @@ int checkcircuit(char **arr){
 char *add_string_location(char * strin1, char *strin2, int location){
 
     char * str = (char *)malloc(strlen(strin1) + strlen(strin2) + 1);
-    char sss[40] = "";
+    
      strcpy(str, (char[1]){'\0'} );
     for (int i = 0; i < location; i++){
         strcat(str, (char[2]){strin1[i] , '\0' });
@@ -255,13 +277,31 @@ int main(int argc, char const *argv[])
 
 
     //=======================================================
-    printVertical();
+    // printVertical();
     printf("-------------------------------\n" );
+
+    printf("Number of node (1 - 26) : ");
+    scanf("%d", &numOfNode);
     addNode(numOfNode);
-    printNode(node);
-    SumofVertical();
+    memset(edge, 0, numOfNode*numOfNode* sizeof(int));
+    for(int i = 0; i < numOfNode; i++ ){
+        for(int j = i ; j < numOfNode ; j++){
+            printf("location = %c , %c : ", node[i] ,node[j]);
+            int x = 0;
+            scanf("%d", &x);
+            edge[i][j] = x;
+            edge[j][i] = x;
+        }
+    }
+    printVertical();
+
+
+
+    // addNode(numOfNode);
+    // printNode(node);
+    
     //to save data of vertical
-    int valueVertical = sum/2;
+    int valueVertical = SumofVertical()/2;
     int getValueVertical = 0;
     
     
@@ -296,6 +336,7 @@ int main(int argc, char const *argv[])
         // add_string_location(arr[0], arr[2], 3);
         char *euler_Citcuit = connectCitcuit(arr, getValueVertical);
         printf("%s\n" , euler_Citcuit);
+        free(euler_Citcuit);
     }else{
         printf("Is non-Euler Circuit");
     }
