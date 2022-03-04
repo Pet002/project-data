@@ -354,7 +354,7 @@ int main(int argc, char const *argv[])
 
     //=======================================================
     // printVertical();
-    printf("-------------------------------\n" );
+    printf("===============================\n" );
 
     printf("Number of node (1 - 26) : ");
     scanf("%d", &numOfNode);
@@ -369,10 +369,11 @@ int main(int argc, char const *argv[])
             edge[j][i] = x;
         }
     }
+    printf("============================== \n");
 
     
     printVertical();
-    printNode(node);
+    // printNode(node);
     
     //to save data of vertical
     int valueVertical = SumofVertical()/2;
@@ -382,7 +383,8 @@ int main(int argc, char const *argv[])
     
     char **arr = getAllCircuit();
 
-    
+    printf("============================== \n");
+    printf("Sub-circuit is : \n");
 
     for (int i = 0; arr[i] != NULL ; i++)
     {
@@ -391,13 +393,6 @@ int main(int argc, char const *argv[])
     }
     printf("===================================\n");
 
-    for (int i = 0; arr[i] != NULL ; i++)
-    {
-        for(int j = 0; j < strlen(arr[i]); j++){
-            printf("%c ", arr[i][j]);
-        }
-        printf("\n");
-    }
     
 
     printf("Vertical value = %d\nSum = %d\n" , getValueVertical, valueVertical);
@@ -414,10 +409,13 @@ int main(int argc, char const *argv[])
     }else{
         printf("Is non-Euler Circuit");
     }
-    printf("\n");
     if(arr){
         free(arr);
     }
+
+
+    printf("===================================\n");
+
 
     // printVertical();
 
