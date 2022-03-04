@@ -5,31 +5,37 @@
 char node[26];
 int sum = 0;
 
+//**input Testcase : when we need input data
+// int numOfNode = 0;
+// int edge[26][26];
+
+
+
 
 //**testcase 1 : Euler circuit;
-// int numOfNode = 7;
-// int edge[7][7] = {
-//                     {0, 1, 1, 0, 1, 1, 0},
-//                     {1, 0, 0, 1, 1, 1, 0},
-//                     {1, 0, 0, 1, 1, 0, 1},
-//                     {0, 1, 1, 0, 1, 0, 1},
-//                     {1, 1, 1, 1, 0, 0, 0},
-//                     {1, 1, 0, 0, 0, 0, 0},
-//                     {0, 0, 1, 1, 0, 0, 0}
-//                  };
+int numOfNode = 7;
+int edge[26][26] = {
+                    {0, 1, 1, 0, 1, 1, 0},
+                    {1, 0, 0, 1, 1, 1, 0},
+                    {1, 0, 0, 1, 1, 0, 1},
+                    {0, 1, 1, 0, 1, 0, 1},
+                    {1, 1, 1, 1, 0, 0, 0},
+                    {1, 1, 0, 0, 0, 0, 0},
+                    {0, 0, 1, 1, 0, 0, 0}
+                 };
 
 
 
 //**testcaste2 : semi Euler circuit;
-int numOfNode = 6;
-int edge[6][6] = {
-                    {0, 1, 1, 0, 1, 1},
-                    {1, 0, 0, 1, 1, 1},
-                    {1, 0, 0, 1, 1, 0},
-                    {0, 1, 1, 0, 1, 0},
-                    {1, 1, 1, 1, 0, 0},
-                    {1, 1, 0, 0, 0, 0}
-                };
+// int numOfNode = 6;
+// int edge[6][6] = {
+//                     {0, 1, 1, 0, 1, 1},
+//                     {1, 0, 0, 1, 1, 1},
+//                     {1, 0, 0, 1, 1, 0},
+//                     {0, 1, 1, 0, 1, 0},
+//                     {1, 1, 1, 1, 0, 0},
+//                     {1, 1, 0, 0, 0, 0}
+//                 };
 
 
 //**testcase3 : non-Euler circuit;
@@ -43,13 +49,20 @@ int edge[6][6] = {
 //                 };
 
 
+//**testcase4 : non-Euler circuit
+// int numOfNode = 6;
+// int edge[6][6]={
+//                 {0, 1, 1, 0, 0, 0},
+//                 {1, 0, 1, 0, 0, 0},
+//                 {1, 1, 0, 0, 0, 0},
+//                 {0, 0, 0, 0, 1, 1},
+//                 {0, 0, 0, 1, 0, 1},
+//                 {0, 0, 0, 1, 1, 0}
+// };
 
 
-void print2DArray(int twoDArray[10][10]){
 
-    printf("%d", twoDArray[0][0]);
 
-}
 
 void printNode(){
     
@@ -113,6 +126,7 @@ char *findSubCircuit(){
     }else{
         char *dest = (char *)malloc(strlen(circuit) + 1);
         strcpy(dest , circuit);
+        
         return dest;
     }
     
@@ -159,6 +173,74 @@ char **getAllCircuit(){
     return result ;
 }
 
+
+int checkcircuit(char **arr){
+    int x = 0, circuit_check = 0;
+    for(int i = 0 ; arr[i] != NULL ;i++ ){
+        circuit_check++;
+    }
+
+    for(int i = 1; arr[i] != NULL; i++){
+        for(int j = 0; j < strlen(arr[0]) ; j++){
+            if(arr[0][j] == arr[i][0]){
+                x++;
+            }
+        }
+    }
+    // printf("DEBUG CIRCUIR = %d    |    DEBUG x = %d \n" , circuit_check, x);
+
+    if(circuit_check != x){
+        return 0;
+    }else{
+        return 1;
+    }
+
+    
+}
+
+char *add_string_location(char * strin1, char *strin2, int location){
+
+    char * str = (char *)malloc(strlen(strin1) + strlen(strin2) + 1);
+    char sss[40] = "";
+     strcpy(str, (char[1]){'\0'} );
+    for (int i = 0; i < location; i++){
+        strcat(str, (char[2]){strin1[i] , '\0' });
+    }
+    strcat(str, strin2);
+    for(int i = location + 1; i < strlen(strin1); i++){
+        strcat(str, (char[2]){strin1[i] , '\0' });
+    }
+    
+    // printf("%s\n", str);
+
+    return str;
+    
+
+}
+
+char *connectCitcuit(char **arr, int value){
+    char * result = (char *)malloc(value + 1);
+    result = arr[0];
+    for(int i = 1; arr[i] != NULL ; i++){
+        for(int j = 0; j < strlen(result); j++){
+            if(arr[i][0] == result[j]){
+                // printf("\ni = %d , j = %d \n", i, j);
+                result = add_string_location(result, arr[i], j);
+                break;
+            }
+        }
+    }
+    
+    // printf("%s", result);
+
+    return result;
+
+}
+
+
+
+
+
 int main(int argc, char const *argv[])
 {   
     // int a = 10 , b = 10;
@@ -172,53 +254,59 @@ int main(int argc, char const *argv[])
     
 
 
-
+    //=======================================================
     printVertical();
     printf("-------------------------------\n" );
     addNode(numOfNode);
     printNode(node);
     SumofVertical();
     //to save data of vertical
-    int valueVertical = sum;
+    int valueVertical = sum/2;
     int getValueVertical = 0;
     
     
     
     char **arr = getAllCircuit();
 
+    
+
     for (int i = 0; arr[i] != NULL ; i++)
     {
         getValueVertical = getValueVertical + strlen(arr[i]) - 1;
         printf("%s\n" , arr[i]);
     }
+    printf("===================================\n");
 
-    printf("Vertical value = %d\nSum = %d\n" , getValueVertical, valueVertical/2);
+    for (int i = 0; arr[i] != NULL ; i++)
+    {
+        for(int j = 0; j < strlen(arr[i]); j++){
+            printf("%c ", arr[i][j]);
+        }
+        printf("\n");
+    }
     
-    if(getValueVertical == valueVertical/2){
-        printf("Is Euler Circuit");
+
+    printf("Vertical value = %d\nSum = %d\n" , getValueVertical, valueVertical);
+    
+
+
+    if(getValueVertical == valueVertical && checkcircuit(arr)){
+        printf("Is Euler Circuit = ");
+
+        // add_string_location(arr[0], arr[2], 3);
+        char *euler_Citcuit = connectCitcuit(arr, getValueVertical);
+        printf("%s\n" , euler_Citcuit);
     }else{
         printf("Is non-Euler Circuit");
     }
     printf("\n");
 
-    // char * circuit = findSubCircuit();
-    // printf("circuit = %s\n" , circuit);
-    // free(circuit);
-    
-    
-
-    // circuit = findSubCircuit();
-    // printf("circuit2 = %s\n" , circuit);
-    
-    // free(circuit);
-    
-    // circuit = findSubCircuit();
-    // printf("circuit3 = %s\n" , circuit);
-    // free(circuit);
-    
+    // printVertical();
 
 
-    printVertical();
+
+
+    //================================================================
     // printf("%c\n" ,k);
 
     // print2DArray(edge);
