@@ -182,7 +182,7 @@ char *findSubCircuit(){
 
     int check = 0;
 
-    while(i < numOfNode && j < numOfNode && locationindex != numOfNode && sum != 0 && ( !(check) ||  circuit[0] != circuit[locationCircuit - 1] ) ){
+    while(i < numOfNode && j < numOfNode && locationindex != numOfNode + 1  && sum != 0 && ( !(check) ||  circuit[0] != circuit[locationCircuit - 1] ) ){
         
         if(edge[i][j] > 0){
             if(i == j){
@@ -202,15 +202,17 @@ char *findSubCircuit(){
             sum -= 2;
         }else{
             j++;
-            if(j == numOfNode){
+            if(j == numOfNode && strlen(circuit) == 0){
                 i = locationindex++;
                 j = 0;
+            }else if(j == numOfNode && strlen(circuit) != 0){
+                break;
             }
         }
         
     }
 
-    if( !(strlen(circuit)) || circuit[0] != circuit[locationCircuit - 1]){
+    if( !(strlen(circuit)) || circuit[0] != circuit[locationCircuit - 1] ){
         return NULL;
     }else{
         char *dest = (char *)malloc(strlen(circuit) + 1);
@@ -251,12 +253,18 @@ char **getAllCircuit(){
     {
         char * x = findSubCircuit();
         result[i] = malloc(sizeof(char ) * (100 + 1));
+        strcpy(result[i], "");
         if(x != NULL){
             strcpy(result[i], x);
             free(x);
-        }else{
+        }else if( strlen(result[0]) != 0 && sum == 0){
             result[i] = NULL;
             nullCheck = 0;
+        }else if(strlen(result[0]) == 0){
+            free(result[0]);
+            i = -1;
+        }else{
+            free(result[i--]);
         }
         i++;
     }
@@ -341,19 +349,11 @@ char *connectCitcuit(char **arr, int value){
 
 int main(int argc, char const *argv[])
 {   
-    // int a = 10 , b = 10;
-    // int length = 10;
-
-    // printf("");
-
-    // int edge[length][length];
-    // memset(edge , 0, length*length*sizeof(int));
-    // char k = 65;
     
 
 
     //=======================================================
-    // printVertical();
+    printVertical();
     printf("===============================\n" );
 
     printf("Number of node (1 - 26) : ");
@@ -365,8 +365,12 @@ int main(int argc, char const *argv[])
             printf("location = %c , %c : ", node[i] ,node[j]);
             int x = 0;
             scanf("%d", &x);
-            edge[i][j] = x;
-            edge[j][i] = x;
+            if(i == j){
+                edge[i][j] = x*2;
+            }else{
+                edge[i][j] = x;
+                edge[j][i] = x;
+            }
         }
     }
     printf("============================== \n");
@@ -407,7 +411,7 @@ int main(int argc, char const *argv[])
         printf("%s\n" , euler_Citcuit);
         free(euler_Citcuit);
     }else{
-        printf("Is non-Euler Circuit");
+        printf("Is non-Euler Circuit\n");
     }
     if(arr){
         free(arr);
